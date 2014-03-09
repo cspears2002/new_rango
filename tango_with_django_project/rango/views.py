@@ -17,6 +17,7 @@ def remove_underscores(category_name_url):
   return category_name
 
 def index(request):
+  
   context_dict = {}
 
   category_list = Category.objects.order_by('-likes')[:5]
@@ -98,6 +99,7 @@ def add_page(request, category_name_url):
      'form': form})
 
 def register(request):
+
   registered = False
 
   if request.method == 'POST':
