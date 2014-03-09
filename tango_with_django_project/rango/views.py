@@ -17,7 +17,6 @@ def remove_underscores(category_name_url):
   return category_name
 
 def index(request):
-  
   context_dict = {}
 
   category_list = Category.objects.order_by('-likes')[:5]
@@ -99,7 +98,6 @@ def add_page(request, category_name_url):
      'form': form})
 
 def register(request):
-
   registered = False
 
   if request.method == 'POST':
@@ -134,7 +132,6 @@ def register(request):
     {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 def user_login(request):
-
   if request.method == 'POST':
     username = request.POST['username']
     password = request.POST['password']
@@ -155,7 +152,8 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-  return HttpResponse("Since you're logged in, you can see this text.")
+  context_dict = {'restricted_message': 'This page is restricted!'}
+  return render(request, 'rango/restricted.html', context_dict)
 
 @login_required
 def user_logout(request):
