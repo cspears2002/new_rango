@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -26,7 +28,21 @@ def index(request):
   page_list = Page.objects.order_by('-views')[:5]
   context_dict['pages'] = page_list
 
-  return render(request, 'rango/index.html', context_dict)
+  response = render(request, 'rango/index.html', context_dict)
+
+  visits = int(request.COOKIES.get('visits', '0'))
+
+  if request.COOKIES.has_key('last_visit'):
+    last_visit = request.COOKIES['last_visit']
+    last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+    if (datetime.now() - last_visit_time).seconds > 5:
+      response.set_cookie('visits', visits + 1)
+      response.set_cookie('last_visit', datetime.now())
+  else:
+      response.set_cookie('last_visit', datetime.now())
+
+  return response
 
 def about(request):
   context_dict = {'boldmessage': 'here is the about page'}
