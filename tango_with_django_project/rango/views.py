@@ -28,24 +28,27 @@ def index(request):
   page_list = Page.objects.order_by('-views')[:5]
   context_dict['pages'] = page_list
 
-  response = render(request, 'rango/index.html', context_dict)
+  # Deal with cookies
+  if request.session.get('last_visit'):
+    last_visit_time = request.session.get('last_visit')
+    visits = request.session.get('visits', 0)
 
-  visits = int(request.COOKIES.get('visits', '0'))
+    if (datetime.now() - datetime.strptime(last_visit_time[:-7]), "%Y-%m-%d %H:%M:%S").seconds > 5:
+      request.session['visits'] = visits + 1
+      request.session['last_visit'] = str(datetime.now())
+    else:
+      request.session['last_visit'] = str(datetime.now())
+      request.session['visits'] = 1
 
-  if request.COOKIES.has_key('last_visit'):
-    last_visit = request.COOKIES['last_visit']
-    last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
-
-    if (datetime.now() - last_visit_time).seconds > 5:
-      response.set_cookie('visits', visits + 1)
-      response.set_cookie('last_visit', datetime.now())
-  else:
-      response.set_cookie('last_visit', datetime.now())
-
-  return response
+  return render(request, 'rango/index.html', context_dict)
 
 def about(request):
-  context_dict = {'boldmessage': 'here is the about page'}
+  if request.session.get('visits'):
+    count = request.session.get('visits')
+  else:
+    count = 0
+
+  context_dict = {'boldmessage': 'here is the about page','visits': count}
   return render(request, 'rango/about.html', context_dict)
 
 def category(request, category_name_url):
