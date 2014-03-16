@@ -8,10 +8,14 @@
   {% block title %}About{% endblock %}
 
   {% block body_block %}
-    <h1>Rango says...</h1>
-    <strong>{{ boldmessage }}</strong>
-    <h3>You have visited this site {{ visits }} times</h3>
+  <div class="hero-unit">
+    <h1>About Rango</h1>
+    This is <strong>Rango's about page</strong>.<br />
+    You have visited the site on <strong>{{ visits }} occasion(s)</strong>.<br />
+
+    Here's a picture of a diving helmet!<br />
     <img src="{% static 'icon_12544.png' %}" alt="Diving helmet" />
+  </div>
   {% endblock %}
 
 </html>
