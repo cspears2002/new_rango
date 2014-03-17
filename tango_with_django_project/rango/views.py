@@ -9,6 +9,8 @@ from django.shortcuts import render
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
+from rango.bing_search import run_query
+
 def remove_spaces(category_list):
   for category in category_list:
     category.url = category.name.replace(' ', '_')
@@ -169,6 +171,17 @@ def user_login(request):
 
   else:
     return render(request, 'rango/login.html', {})
+
+def search(request):
+  result_list = []
+
+  if request.method == 'POST':
+    query = request.POST['query'].strip()
+
+    if query:
+      result_list = run_query(query)
+
+  return render(request, 'rango/search.html', {'result_list': result_list})
 
 @login_required
 def restricted(request):

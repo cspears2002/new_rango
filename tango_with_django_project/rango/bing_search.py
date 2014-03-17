@@ -32,7 +32,7 @@ def run_query(search_terms):
     opener = urllib2.build_opener(handler)
     urllib2.install_opener(opener)
 
-    reponse = urllib2.urlopen(search_url).read()
+    response = urllib2.urlopen(search_url).read()
 
     json_response = json.loads(response)
 
