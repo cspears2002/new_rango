@@ -51,7 +51,10 @@ def run_query(search_terms):
 if __name__ == '__main__':
   search_terms = raw_input("What are you looking for? ")
   results = run_query(search_terms)
-  print results
+  rank = 1
+  for result in results:
+    print rank, result['title'], result['link']
+    rank += 1
 
 
   
