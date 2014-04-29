@@ -46,3 +46,12 @@ def run_query(search_terms):
     print "Error when querying the Bing API: ", e
 
   return results
+
+# Lets me run the scripy by itself
+if __name__ == '__main__':
+  search_terms = raw_input("What are you looking for? ")
+  results = run_query(search_terms)
+  print results
+
+
+  
